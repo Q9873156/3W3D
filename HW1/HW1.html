@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<style>
+
+
+</style>
+</head>
+
+<body> 
+<h1> Homework 1 (<a href="https://jsfiddle.net/qaad1234/owdd2xLy/"> jsfiddle </a>)</h1>
+</body>
+
+<div id='light0' style='float:left; width:30%'>
+  light 0
+</div>
+
+<button id='switch0'style='width:20%'>
+  switch0
+</button>
+<button id='switch1'style='width:19%'>
+  switch1
+</button>
+<div id='light1' style='float:right; width:30%'>
+  light 1
+</div>
+<br>
+
+<div id='light2' style='float:left; width:30%'>
+  light 2
+</div>
+<button id='switch2'style='width:20%'>
+  switch2
+</button>
+<button id='switch3'style='width:19%'>
+  switch3
+</button>
+<div id='light3' style='float:right; width:30%'>
+  light 3
+</div>
+<br>
+<div id='light4' style='float:left; width:30%'>
+  light 4
+</div>
+
+<button id='switch4'style='width:20%'>
+  switch4
+</button>
+<button id='switch5'style='width:19%'>
+  switch5
+</button>
+
+<div id='light5' style='float:right; width:30%'>
+  light 5
+</div>
+<br>
+<div id='light6' style='float:left; width:30%'>
+  light 6
+</div>
+
+<button id='switch6'style='width:20%'>
+  switch6
+</button>
+<button id='switch7'style='width:19%'>
+  switch7
+</button>
+
+<div id='light7' style='float:right; width:30%'>
+  light 7
+</div>
+
+<br>
+<br>
+<button id='toggle'style='float:right; width:100%'>
+  on
+</button>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+function Lamp(lampId) {
+  var name = '#' + lampId;
+  var status = false;
+
+  var toggle1 = function() {
+    status = !status;
+    if (name === '#light0') {
+      if (status) {
+        $(name).css('backgroundColor', 'red');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(250,230,23)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light1') {
+      if (status) {
+        $(name).css('backgroundColor', 'orange');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(266,220,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light2') {
+      if (status) {
+        $(name).css('backgroundColor', 'yellow');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(50,130,623)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light3') {
+      if (status) {
+        $(name).css('backgroundColor', 'green');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(25,230,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light4') {
+      if (status) {
+        $(name).css('backgroundColor', 'blue');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(625,520,230)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light5') {
+      if (status) {
+        $(name).css('backgroundColor', 'gray');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(50,20,235)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light6') {
+      if (status) {
+        $(name).css('backgroundColor', 'purple');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(620,2,233)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light7') {
+      if (status) {
+        $(name).css('backgroundColor', 'pink');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(520,30,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+  };
+
+  this.toggle = function() {
+    status = !status;
+    if (name === '#light0') {
+      if (status) {
+        $(name).css('backgroundColor', 'red');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(250,230,23)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light1') {
+      if (status) {
+        $(name).css('backgroundColor', 'orange');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(266,220,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light2') {
+      if (status) {
+        $(name).css('backgroundColor', 'yellow');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(50,130,623)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light3') {
+      if (status) {
+        $(name).css('backgroundColor', 'green');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(25,230,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light4') {
+      if (status) {
+        $(name).css('backgroundColor', 'blue');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(625,520,230)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light5') {
+      if (status) {
+        $(name).css('backgroundColor', 'gray');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(50,20,235)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light6') {
+      if (status) {
+        $(name).css('backgroundColor', 'purple');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(620,2,233)');
+        $(name).text(name + ' is on');
+      }
+    }
+
+    if (name === '#light7') {
+      if (status) {
+        $(name).css('backgroundColor', 'pink');
+        $(name).text(name + ' is off');
+      } else {
+        $(name).css('backgroundColor', 'rgb(520,30,30)');
+        $(name).text(name + ' is on');
+      }
+    }
+  };
+
+  this.check = function() {
+    return status;
+  }
+
+  this.toggleBlink = function() {
+    setInterval(function() {
+      toggle1();
+    }, 500);
+  }
+}
+
+var objects = ['l0', 'l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7'];
+
+
+objects[0] = new Lamp('light0');
+objects[0].toggle();
+$('#switch0').click(function() {
+  objects[0].toggle();
+});
+$('#toggle').click(function() {
+  objects[0].toggleBlink()
+});
+
+
+objects[1] = new Lamp('light1');
+objects[1].toggle();
+$('#toggle').click(function() {
+  objects[1].toggleBlink()
+});
+$('#switch1').click(function() {
+  objects[1].toggle();
+});
+
+objects[2] = new Lamp('light2');
+objects[2].toggle();
+$('#toggle').click(function() {
+  objects[2].toggleBlink()
+});
+$('#switch2').click(function() {
+  objects[2].toggle();
+});
+
+objects[3] = new Lamp('light3');
+objects[3].toggle();
+$('#toggle').click(function() {
+  objects[3].toggleBlink()
+});
+$('#switch3').click(function() {
+  objects[3].toggle();
+});
+
+objects[4] = new Lamp('light4');
+objects[4].toggle();
+$('#toggle').click(function() {
+  objects[4].toggleBlink()
+});
+$('#switch4').click(function() {
+  objects[4].toggle();
+});
+
+objects[5] = new Lamp('light5');
+objects[5].toggle();
+$('#toggle').click(function() {
+  objects[5].toggleBlink()
+});
+$('#switch5').click(function() {
+  objects[5].toggle();
+});
+
+objects[6] = new Lamp('light6');
+objects[6].toggle();
+$('#toggle').click(function() {
+  objects[6].toggleBlink()
+});
+$('#switch6').click(function() {
+  objects[6].toggle();
+});
+
+objects[7] = new Lamp('light7');
+objects[7].toggle();
+$('#toggle').click(function() {
+  objects[7].toggleBlink()
+});
+$('#switch7').click(function() {
+  objects[7].toggle();
+});
+
+
+
+
+
+
+</script>
+</body>
+</html>

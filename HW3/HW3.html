@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+	<meta http-equiv="pragma" content="no-cache">
+	<!--<meta http-equiv="refresh" content="5">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<?php if(!isset($PageTitle)) $PageTitle="Web3D titlepage";?>
+	<title>Web3D titlepage</title>
+	<style>
+	div{ text-align:center;font-weight:bold;font-family:標楷體;	}
+		
+	.Outerbox { width:100%; margin:0px auto; overflow:auto;  height:50%; background:#FFFFEE;z-index:10;	}
+	@media only screen and (min-width:480px) {
+	.Outerbox { width:480px; }	}
+	@media only screen and (min-width:800px) {
+	.Outerbox { width:800px; }	}
+	@media only screen and (min-width:1000px) {
+	.Outerbox { width:1000px; }	}
+	
+	ul { text-align:left;	}
+
+<style>
+	#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  overflow: hidden;
+}
+
+</style>
+</head>
+
+<body> 
+<h1> Homework 3 (<a href="http://jsfiddle.net/qaad1234/mp5vtryz/"> jsfiddle </a>)</h1>
+<h3>本次作業不太會做，所以很多功能不正確，spotlight及光影未製作成功，簡單的註解則是沒做
+
+</body>
+<br>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+
+var camera, scene, renderer, mesh, light, controls, box ;
+var texture,oneSideTex ;
+
+init();
+animate();
+/////////////////////////////////
+function Slight(x,y){
+  var status=false;
+   /////////// spotlight////////////////
+  
+  var pointLight = new THREE.PointLight(0xffffff, 0.8);
+  pointLight.position.set(0, 300, 200);
+  scene.add (pointLight);
+
+  var spotLight = new THREE.SpotLight(0xffffff);
+  spotLight.position.set(x, 150, 0);
+  spotLight.angle = 0.25;
+  spotLight.penumbra = 0.5;
+  spotLight.distance = 500;
+  scene.add(spotLight);
+  //scene.add (helper = new THREE.SpotLightHelper (spotLight, 3));
+
+  lamp = buildLamp();
+  scene.add(lamp);
+  lamp.position.copy(spotLight.position);
+
+  /*var cubeGeometry = new THREE.BoxGeometry(70, 1, 80, 100, 100, 100);
+  var cubeMaterial = new THREE.MeshLambertMaterial({
+    color: 0x1ec876
+  });
+  cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+  cube.position.set(120, 60, 99);
+  cube.rotation.x = Math.PI / 2;
+  scene.add(cube);*/
+
+  spotLight.target = y;
+  lamp.lookAt(y.position);
+  
+}
+//////////////////////////////////
+// build a lamp whose axis is +Z
+function buildLamp() {
+  var lampModel = new THREE.Object3D();
+  var layer2 = new THREE.Object3D();
+  var lamp = new THREE.Mesh(new THREE.CylinderGeometry(5, 5, 20, 32),
+    new THREE.MeshLambertMaterial({
+      transparent: true,
+      opacity: 0.2
+    }));
+  layer2.add(lamp);
+  lampModel.add(layer2);
+  lamp.position.y = 10;
+  layer2.rotation.x = Math.PI / 2;
+  return lampModel;
+}
+
+//////////////////////////////////
+function texturedFace(url, x, y) {
+  var geometry = new THREE.BoxGeometry(x, y, 0.1);
+  geometry.vertices.push(
+    new THREE.Vector3(-50, 50, 0),
+    new THREE.Vector3(-50, -50, 0),
+    new THREE.Vector3(50, -50, 0),
+    new THREE.Vector3(50, 50, 0)
+  );
+
+  var face;
+  face = new THREE.Face3(0, 1, 2);
+  face.materialIndex = 0;
+  geometry.faces.push(face);
+  face = new THREE.Face3(0, 2, 3);
+  face.materialIndex = 0;
+  geometry.faces.push(face);
+
+  geometry.faceVertexUvs[0].push([new THREE.Vector2(0, 1), new THREE.Vector2(0, 0), new THREE.Vector2(1, 0)]);
+  geometry.faceVertexUvs[0].push([new THREE.Vector2(0, 1), new THREE.Vector2(1, 0), new THREE.Vector2(1, 1)]);
+  geometry.computeBoundingSphere();
+  geometry.computeFaceNormals();
+  geometry.computeVertexNormals();
+  // CORS:
+  // http://stackoverflow.com/questions/24087757/three-js-and-loading-a-cross-domain-image
+  THREE.ImageUtils.crossOrigin = '';
+  texture = THREE.ImageUtils.loadTexture(url);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.minFilter = THREE.LinearFilter;
+  return new THREE.Mesh(geometry,
+    new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide
+    }));
+
+
+}
+
+///////////////////////////////////
+
+function newwall(a, b, c, x, y, z) {
+  var geometry1 = new THREE.BoxGeometry(a, b, c);
+  var material1 = new THREE.MeshBasicMaterial({
+    color: 0xD0D0D0
+  });
+
+  wall = new THREE.Mesh(geometry1, material1);
+  wall.position.set(x, y, z);
+  scene.add(wall);
+}
+
+/////////////////////////////////////
+function madeBoxGeometry(x, y, z) {
+  var geometry = new THREE.BoxGeometry(x, y, z);
+  var material = new THREE.MeshBasicMaterial();
+
+  box = new THREE.Mesh(geometry, material);
+
+}
+
+/////////////////////////////////////
+
+function loadTexture(url) {
+
+  // instantiate a loader
+  var loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('');
+
+  // load a resource
+  loader.load(
+    // resource URL
+    url, // Lena
+    // Function when resource is loaded
+    function(tex) {
+      console.log('texture loaded ...');
+
+      texture = tex; // for global access with Keypress
+    },
+
+    // Function called when download progresses
+    function(xhr) {
+      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    },
+    // Function called when download errors
+    function(xhr) {
+      console.log('An error happened');
+    }
+  );
+
+}
+
+
+//////////////////////////////////////////////////
+
+function init() {
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+  camera.position.x = 500;
+  scene.add(camera);
+
+  light = new THREE.DirectionalLight(0xffffff);
+  light.position.set(0, 200, 0);
+  //scene.add(light);
+
+  /*var gridXZ = new THREE.GridHelper(500, 10, 'red', 'white');
+  scene.add(gridXZ);*/
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x333333);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  document.body.appendChild(renderer.domElement);
+
+  ////////////////////////////////////////////////picture
+  P1 = texturedFace('http://i.imgur.com/O4vZAzx.jpg', 100, 80);
+  P1.position.set(-198, 60, 0);
+  P1.rotation.y = Math.PI / 2;
+  scene.add(P1);
+
+  P2 = texturedFace('http://i.imgur.com/4veXmuS.jpg', 70, 80);
+  P2.position.set(120, 60, 98);
+  scene.add(P2);
+
+  P3 = texturedFace('http://i.imgur.com/s7cqGzT.jpg', 70, 80);
+  P3.position.set(0, 60, 98);
+  scene.add(P3);
+
+  P4 = texturedFace('http://i.imgur.com/PFMP1rh.png', 70, 80);
+  P4.position.set(-120, 60, 98);
+  scene.add(P4);
+
+  P5 = texturedFace('http://i.imgur.com/8CVtOZs.jpg', 70, 80);
+  P5.position.set(120, 60, -98);
+  scene.add(P5);
+
+  P6 = texturedFace('http://i.imgur.com/3eLZVjz.jpg', 70, 80);
+  P6.position.set(0, 60, -98);
+  scene.add(P6);
+
+  P7 = texturedFace('http://i.imgur.com/YbkK3mK.jpg', 70, 80);
+  P7.position.set(-120, 60, -98);
+  scene.add(P7);
+  ////////////chair/////////////
+  var chair = new THREE.Object3D();
+  var geometry = new THREE.BoxGeometry(80, 10, 30, 100, 16, 16);
+  var material = new THREE.MeshLambertMaterial({
+    color: 0x66B3FF
+  });
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(0, 30, 0);
+  chair.add(mesh);
+
+  var geometry = new THREE.BoxGeometry(30, 10, 30, 100, 16, 16);
+  var material = new THREE.MeshLambertMaterial({
+    color: 0x66B3FF
+  });
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.z = Math.PI / 2;
+  mesh.position.set(35, 15, 0);
+  chair.add(mesh);
+
+  var leg = mesh.clone();
+  leg.position.set(-35, 15, 0);
+  chair.add(leg);
+  scene.add(chair);
+  chair.position.set(60, 0, 0);
+  chair2 = chair.clone();
+  scene.add(chair2);
+  chair2.position.set(-60, 0, 0);
+
+  //////////// grid ////////////
+  var geometry = new THREE.BoxGeometry(400, 200, 0);
+  var material = new THREE.MeshLambertMaterial();
+
+  mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = Math.PI / 2;
+  scene.add(mesh);
+
+  loadTexture('http://i.imgur.com/DrvlmNW.jpg');
+  //////////////////////////////
+  Slight(-120,P1);
+  Slight(120,P2);
+  Slight(0,P3);
+  Slight(-120,P4);
+  Slight(120,P5);
+  Slight(0,P6);
+  Slight(-120,P7);
+  
+  ////////////////////////////////
+
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  mesh.receiveShadow = true;
+  chair2.castShadow = true;
+  chair2.receiveShadow = true; // self shadow  
+
+
+  /////////////////////////////////////////////////
+  newwall(400, 120, 0, 0, 60, -100);
+  newwall(400, 120, 0, 0, 60, 100);
+  var geometry2 = new THREE.BoxGeometry(200, 120, 0);
+  var material2 = new THREE.MeshBasicMaterial({
+    color: 0xD0D0D0
+  });
+  var wall2 = new THREE.Mesh(geometry2, material2);
+  wall2.rotation.y = Math.PI / 2;
+  wall2.position.set(-200, 60, 0);
+  scene.add(wall2);
+
+
+
+}
+
+function animate() {
+  if (texture !== undefined) {
+    // texture already loaded ...
+    mesh.material.map = texture;
+
+    // tell Three.js that something needs update
+    mesh.material.needsUpdate = true;
+  }
+
+  if (oneSideTex !== undefined) {
+    // texture already loaded ...
+    mesh2.material = oneSideTex;
+  }
+
+  controls.update();
+
+  requestAnimationFrame(animate);
+  render();
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+
+</script>
+</body>
+
+</html>
